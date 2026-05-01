@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body { background-color: #f9f9f7; color: #111111; }
+}
+
+@layer components {
+  .btn-dark {
+    @apply px-7 py-3.5 bg-black text-white text-xs tracking-widest uppercase border-none cursor-pointer rounded-sm font-sans hover:bg-dark transition-colors;
+  }
+  .btn-ghost {
+    @apply px-7 py-3.5 bg-transparent text-black text-xs tracking-widest uppercase border border-black cursor-pointer rounded-sm font-sans hover:bg-stone-100 transition-colors;
+  }
+  .eyebrow {
+    @apply text-xs tracking-[0.12em] uppercase text-gray flex items-center gap-2.5
+    before:content-[''] before:block before:w-5 before:h-px before:bg-gray;
+  }
+  .section-title {
+    @apply font-serif text-[38px] font-normal text-black;
+  }
+  .input-field {
+    @apply w-full border border-border bg-white px-4 py-3 text-sm text-black placeholder-light
+    focus:outline-none focus:border-black transition-colors rounded-sm;
+  }
+  .label {
+    @apply block text-xs uppercase tracking-[0.08em] text-mid mb-1.5;
+  }
+  .card-hover {
+    @apply transition-transform duration-200 hover:-translate-y-0.5;
+  }
+}
