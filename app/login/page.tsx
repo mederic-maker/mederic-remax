@@ -1,81 +1,68 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
-export default function LoginPage() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const redirect = searchParams.get('redirect') ?? '/crm'
+export const dynamic = 'force-dynamic'
+
+function LoginForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const router = useRouter()
+  const searchParams = useSearchParams()
 
-  async function handleLogin(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
     setError('')
     const supabase = createClient()
     const { error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) {
-      setError('Courriel ou mot de passe incorrect.')
+      setError(error.message)
       setLoading(false)
     } else {
-      router.push(redirect)
-      router.refresh()
+      router.push('/crm')
     }
   }
 
   return (
-    <div className="min-h-screen bg-bg flex items-center justify-center px-4">
-      <div className="w-full max-w-sm">
-        <div className="text-center mb-10">
-          <h1 className="font-serif text-4xl font-normal text-black mb-2">CRM</h1>
-          <p className="text-sm text-gray">Médéric Souccar · RE/MAX Vision</p>
-        </div>
-
-        <form onSubmit={handleLogin} className="flex flex-col gap-5">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="max-w-md w-full p-8 bg-white shadow">
+        <h1 className="text-2xl font-bold mb-6 text-center">Connexion</h1>
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="label">Courriel</label>
+            <label className="block text-sm font-medium mb-1">Courriel</label>
             <input
               type="email"
-              required
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="input-field"
-              placeholder="mederic@medericsouccar.com"
-              autoComplete="email"
+              onChange={e => setEmail(e.target.value)}
+              className="w-full border px-3 py-2"
+              required
             />
           </div>
           <div>
-            <label className="label">Mot de passe</label>
+            <label className="block text-sm font-medium mb-1">Mot de passe</label>
             <input
               type="password"
-              required
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="input-field"
-              placeholder="••••••••"
-              autoComplete="current-password"
+              onChange={e => setPassword(e.target.value)}
+              className="w-full border px-3 py-2"
+              required
             />
           </div>
-
-          {error && (
-            <p className="text-xs text-red-600 text-center">{error}</p>
-          )}
-
+          {error && <p className="text-red-600 text-sm">{error}</p>}
           <button
             type="submit"
             disabled={loading}
-            className="btn-dark w-full justify-center disabled:opacity-60 mt-2"
+            className="w-full bg-black text-white py-2 disabled:opacity-60"
           >
             {loading ? 'Connexion…' : 'Se connecter'}
           </button>
         </form>
-
         <p className="text-center mt-8">
-          <a href="/" className="text-xs text-gray hover:text-black transition-colors tracking-[0.06em] uppercase">
+          <a href="/" className="text-xs text-gray-500 hover:text-black uppercase tracking-widest">
             ← Retour au site
           </a>
         </p>
@@ -84,3 +71,10 @@ export default function LoginPage() {
   )
 }
 
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div>Chargement...</div>}>
+      <LoginForm />
+    </Suspense>
+  )
+}
