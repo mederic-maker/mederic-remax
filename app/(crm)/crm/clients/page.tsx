@@ -4,7 +4,7 @@ import { formatDate, STATUS_LABELS } from '@/lib/format'
 import type { Client } from '@/types'
 
 export default async function ClientsPage() {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data: clients } = await supabase
     .from('clients')
     .select('*')

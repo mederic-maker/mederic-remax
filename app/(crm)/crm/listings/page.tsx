@@ -11,7 +11,7 @@ const STATUS_CLS: Record<string, string> = {
 }
 
 export default async function CrmListingsPage() {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data: listings } = await supabase
     .from('listings')
     .select('*')

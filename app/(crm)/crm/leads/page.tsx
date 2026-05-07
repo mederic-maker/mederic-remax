@@ -4,7 +4,7 @@ import type { Lead } from '@/types'
 import LeadActions from './LeadActions'
 
 export default async function LeadsPage() {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data: leads } = await supabase
     .from('leads')
     .select('*, listings(address)')

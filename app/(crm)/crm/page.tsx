@@ -4,7 +4,7 @@ import { formatPrice, formatDate } from '@/lib/format'
 import type { Lead } from '@/types'
 
 export default async function DashboardPage() {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const [
     { count: clientCount },
