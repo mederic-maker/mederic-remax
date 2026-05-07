@@ -50,3 +50,5 @@ export default async function ListingsPage() {
     </div>
   )
 }
+
+export const dynamic = 'force-dynamic'

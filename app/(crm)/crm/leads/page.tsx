@@ -79,3 +79,5 @@ function LeadTable({ leads }: { leads: (Lead & { listings?: { address: string } 
     </div>
   )
 }
+
+export const dynamic = 'force-dynamic'

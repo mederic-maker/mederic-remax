@@ -189,3 +189,5 @@ function PlaceholderCard({ price, addr, beds, baths, sqft, status, sold }: {
   )
 }
 export const dynamic = 'force-dynamic'
+
+export const dynamic = 'force-dynamic'

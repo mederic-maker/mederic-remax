@@ -77,3 +77,5 @@ function StatusBadge({ status }: { status: string }) {
     </span>
   )
 }
+
+export const dynamic = 'force-dynamic'

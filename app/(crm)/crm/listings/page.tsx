@@ -70,3 +70,5 @@ export default async function CrmListingsPage() {
     </div>
   )
 }
+
+export const dynamic = 'force-dynamic'

@@ -149,3 +149,5 @@ export default function NewListingPage() {
     </div>
   )
 }
+
+export const dynamic = 'force-dynamic'
