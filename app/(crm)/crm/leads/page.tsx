@@ -13,7 +13,7 @@ export default async function LeadsPage({
 }: {
   searchParams: { stage?: string; q?: string }
 }) {
-  const supabase = createClient()
+  const supabase = await createClient()
   let query = supabase
     .from('leads')
     .select('*, listings(address)')

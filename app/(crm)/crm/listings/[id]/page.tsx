@@ -6,7 +6,7 @@ import { formatPrice, formatDate, STATUS_LABELS } from '@/lib/format'
 import ListingCrmActions from './ListingCrmActions'
 
 export default async function CrmListingDetailPage({ params }: { params: { id: string } }) {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data: listing } = await supabase
     .from('listings')
     .select('*')

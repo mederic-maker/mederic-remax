@@ -5,7 +5,7 @@ import type { Listing } from '@/types'
 export const revalidate = 60
 
 export default async function ListingsPage() {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data: listings } = await supabase
     .from('listings')
     .select('*')

@@ -13,7 +13,7 @@ const STAGE_MAP = Object.fromEntries(STAGES.map((s) => [s.id, s.label]))
 export const dynamic = 'force-dynamic'
 
 export default async function LeadDetailPage({ params }: { params: { id: string } }) {
-  const supabase = createClient()
+  const supabase = await createClient()
   const [{ data: lead }, { data: emailLogs }, { data: smsLogs }] = await Promise.all([
     supabase.from('leads').select('*, listings(address, city, price)').eq('id', params.id).single(),
     supabase.from('email_logs').select('*').eq('lead_id', params.id).order('created_at', { ascending: false }),

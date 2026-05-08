@@ -13,7 +13,7 @@ const STATUS_BADGE: Record<string, { label: string; cls: string }> = {
 }
 
 export default async function ListingPage({ params }: { params: { id: string } }) {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data: listing } = await supabase
     .from('listings')
     .select('*')

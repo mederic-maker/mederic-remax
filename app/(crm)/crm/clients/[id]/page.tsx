@@ -8,7 +8,7 @@ import type { Interaction } from '@/types'
 export default async function ClientDetailPage({ params }: { params: { id: string } }) {
   if (params.id === 'new') return null // handled by separate page
 
-  const supabase = createClient()
+  const supabase = await createClient()
   const [{ data: client }, { data: interactions }] = await Promise.all([
     supabase.from('clients').select('*, listings(address, city, price, status)').eq('id', params.id).single(),
     supabase.from('interactions').select('*').eq('client_id', params.id).order('date', { ascending: false }),

@@ -5,7 +5,7 @@ import Link from 'next/link'
 export const dynamic = 'force-dynamic'
 
 export default async function KanbanPage() {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data: leads, error } = await supabase
     .from('leads')

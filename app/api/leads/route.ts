@@ -20,7 +20,10 @@ export async function POST(req: NextRequest) {
     if (!parsed.success) {
       return NextResponse.json({ error: 'Données invalides' }, { status: 400 })
     }
-    const data = parsed.data
+    const data = parsed.data as {
+      first_name: string; last_name: string; email: string
+      phone?: string | null; message: string; listing_id?: string | null
+    }
 
     const supabase = createServiceClient()
     const { data: lead, error } = await supabase
