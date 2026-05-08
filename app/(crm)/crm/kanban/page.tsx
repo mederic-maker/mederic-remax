@@ -6,11 +6,20 @@ export const dynamic = 'force-dynamic'
 
 export default async function KanbanPage() {
   const supabase = createClient()
-  const { data: leads } = await supabase
+
+  const { data: leads, error } = await supabase
     .from('leads')
     .select('*, listings(address)')
-    .neq('stage', 'perdu')
-    .order('stage_order', { ascending: true })
+    .order('created_at', { ascending: false })
+
+  if (error) {
+    console.error('[kanban] Supabase error:', error.message)
+  }
+
+  // Normaliser côté JS : si stage n'existe pas encore, mettre 'nouveau' par défaut
+  const kanbanLeads = (leads ?? [])
+    .map((l) => ({ ...l, stage: l.stage ?? 'nouveau', stage_order: l.stage_order ?? 0 }))
+    .filter((l) => l.stage !== 'perdu')
 
   return (
     <div className="px-10 py-10 min-h-screen">
@@ -22,7 +31,14 @@ export default async function KanbanPage() {
         <Link href="/crm/leads/new" className="btn-dark">+ Nouveau lead</Link>
       </div>
 
-      <KanbanBoard initialLeads={leads ?? []} />
+      {error && (
+        <div className="mb-6 p-4 border border-red-200 bg-red-50 rounded-sm text-sm text-red-700">
+          ⚠️ Erreur : {error.message}
+          <p className="mt-1 text-xs">Assure-toi d&apos;avoir exécuté la migration v2 dans Supabase SQL Editor.</p>
+        </div>
+      )}
+
+      <KanbanBoard initialLeads={kanbanLeads} />
     </div>
   )
 }
