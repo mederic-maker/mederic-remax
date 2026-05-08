@@ -2,14 +2,15 @@
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { LayoutDashboard, Users, Home, MessageSquare, LogOut, Globe } from 'lucide-react'
+import { LayoutDashboard, Users, Home, MessageSquare, LogOut, Globe, Kanban } from 'lucide-react'
 import PushToggle from '@/components/PushToggle'
 
 const NAV = [
-  { href: '/crm',          label: 'Tableau de bord', icon: LayoutDashboard, exact: true },
-  { href: '/crm/clients',  label: 'Clients',          icon: Users },
-  { href: '/crm/listings', label: 'Listings',         icon: Home },
-  { href: '/crm/leads',    label: 'Leads',            icon: MessageSquare },
+  { href: '/crm',           label: 'Tableau de bord', icon: LayoutDashboard, exact: true },
+  { href: '/crm/kanban',    label: 'Pipeline Kanban',  icon: Kanban },
+  { href: '/crm/leads',     label: 'Leads',            icon: MessageSquare },
+  { href: '/crm/clients',   label: 'Clients',          icon: Users },
+  { href: '/crm/listings',  label: 'Listings',         icon: Home },
 ]
 
 export default function Sidebar() {
@@ -27,10 +28,10 @@ export default function Sidebar() {
     <aside className="w-56 shrink-0 bg-black text-white flex flex-col h-screen sticky top-0">
       <div className="px-6 py-7 border-b border-white/10">
         <div className="font-serif text-lg">Médéric Souccar</div>
-        <div className="text-2xs text-white/40 tracking-[0.08em] uppercase mt-0.5">CRM</div>
+        <div className="text-2xs text-white/40 tracking-[0.08em] uppercase mt-0.5">CRM · RE/MAX Vision</div>
       </div>
 
-      <nav className="flex-1 px-3 py-4 flex flex-col gap-0.5">
+      <nav className="flex-1 px-3 py-4 flex flex-col gap-0.5 overflow-y-auto">
         {NAV.map(({ href, label, icon: Icon, exact }) => {
           const active = exact ? pathname === href : pathname.startsWith(href)
           return (

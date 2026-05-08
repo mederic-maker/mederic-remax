@@ -2,6 +2,7 @@ export type ListingStatus = 'actif' | 'vendu' | 'sous_offre' | 'retiré'
 export type ClientType = 'acheteur' | 'vendeur' | 'les_deux'
 export type ClientStatus = 'prospect' | 'actif' | 'fermé' | 'inactif'
 export type InteractionType = 'appel' | 'courriel' | 'visite' | 'réunion' | 'note'
+export type KanbanStage = 'nouveau' | 'contacté' | 'visite' | 'offre' | 'fermé' | 'perdu'
 
 export interface Listing {
   id: string
@@ -32,6 +33,8 @@ export interface Client {
   budget_min: number | null
   budget_max: number | null
   linked_listing_id: string | null
+  follow_up_date: string | null
+  follow_up_sent: boolean
 }
 
 export interface Lead {
@@ -42,9 +45,16 @@ export interface Lead {
   email: string
   phone: string | null
   message: string
+  notes: string | null
   listing_id: string | null
   converted: boolean
   converted_client_id: string | null
+  stage: KanbanStage
+  stage_order: number
+  follow_up_date: string | null
+  follow_up_sent: boolean
+  auto_email_sent: boolean
+  auto_sms_sent: boolean
 }
 
 export interface Interaction {
@@ -56,7 +66,31 @@ export interface Interaction {
   date: string
 }
 
-export interface PushSubscription {
+export interface EmailLog {
+  id: string
+  created_at: string
+  lead_id: string | null
+  client_id: string | null
+  to_email: string
+  subject: string
+  body: string
+  sent: boolean
+  error: string | null
+}
+
+export interface SmsLog {
+  id: string
+  created_at: string
+  lead_id: string | null
+  client_id: string | null
+  to_phone: string
+  body: string
+  sent: boolean
+  twilio_sid: string | null
+  error: string | null
+}
+
+export interface PushSubscriptionRecord {
   id: string
   created_at: string
   endpoint: string
