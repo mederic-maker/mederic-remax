@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { formatDate } from '@/lib/format'
 import Link from 'next/link'
 import LeadActions from './LeadActions'
-import { STAGES } from '@/components/crm/KanbanBoard'
+import { STAGES } from '@/lib/stages'
 
 export const dynamic = 'force-dynamic'
 

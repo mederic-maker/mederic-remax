@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { STAGES, KanbanStage } from '@/components/crm/KanbanBoard'
+import { STAGES, type KanbanStage } from '@/lib/stages'
 
 export default function StageSwitcher({
   leadId, currentStage,

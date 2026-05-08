@@ -11,8 +11,11 @@ import { createClient } from '@/lib/supabase/client'
 import { formatDate } from '@/lib/format'
 import Link from 'next/link'
 import { GripVertical, Mail, MessageSquare, Calendar } from 'lucide-react'
+import { STAGES, type KanbanStage } from '@/lib/stages'
 
-export type KanbanStage = 'nouveau' | 'contacté' | 'visite' | 'offre' | 'fermé' | 'perdu'
+// Re-export pour compatibilité
+export type { KanbanStage }
+export { STAGES }
 
 export interface KanbanLead {
   id: string
@@ -26,15 +29,6 @@ export interface KanbanLead {
   created_at: string
   listings?: { address: string } | null
 }
-
-export const STAGES: { id: KanbanStage; label: string; color: string; dot: string }[] = [
-  { id: 'nouveau',   label: 'Nouveau',          color: 'bg-bg border-border',         dot: 'bg-black' },
-  { id: 'contacté',  label: 'Contacté',          color: 'bg-bg border-border',         dot: 'bg-mid' },
-  { id: 'visite',    label: 'Visite planifiée',  color: 'bg-bg border-border',         dot: 'bg-gray' },
-  { id: 'offre',     label: 'Offre en cours',    color: 'bg-bg border-border',         dot: 'bg-dark' },
-  { id: 'fermé',     label: 'Fermé ✓',           color: 'bg-bg border-border',         dot: 'bg-black' },
-  { id: 'perdu',     label: 'Perdu',             color: 'bg-bg border-border',         dot: 'bg-light' },
-]
 
 // ── Card draggable ────────────────────────────────────────────
 function KanbanCard({ lead, isDragging }: { lead: KanbanLead; isDragging?: boolean }) {
@@ -118,7 +112,6 @@ function KanbanColumn({
     <div className={`flex flex-col w-64 shrink-0 rounded-sm border
       ${isOver ? 'border-black bg-stone-100' : 'border-border bg-bg'}
       transition-colors`}>
-      {/* Header */}
       <div className="px-4 py-3 border-b border-border flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className={`w-2 h-2 rounded-full ${stage.dot}`} />
@@ -131,7 +124,6 @@ function KanbanColumn({
         </span>
       </div>
 
-      {/* Cards */}
       <SortableContext items={leads.map((l) => l.id)} strategy={verticalListSortingStrategy}>
         <div className="flex flex-col gap-2 p-3 flex-1 min-h-[120px]">
           {leads.map((lead) => (
@@ -160,7 +152,6 @@ export default function KanbanBoard({ initialLeads }: { initialLeads: KanbanLead
 
   const activeLead = activeId ? leads.find((l) => l.id === activeId) : null
 
-  // Trouver dans quel stage se trouve une card
   const findStage = (id: string): KanbanStage | null =>
     leads.find((l) => l.id === id)?.stage ?? null
 
@@ -171,9 +162,7 @@ export default function KanbanBoard({ initialLeads }: { initialLeads: KanbanLead
   function onDragOver({ active, over }: DragOverEvent) {
     if (!over) { setOverStage(null); return }
     const overId = over.id as string
-    // over peut être un stage-id ou un card-id
-    const targetStage = STAGES.find((s) => s.id === overId)?.id
-      ?? findStage(overId)
+    const targetStage = STAGES.find((s) => s.id === overId)?.id ?? findStage(overId)
     setOverStage(targetStage ?? null)
   }
 
@@ -193,16 +182,11 @@ export default function KanbanBoard({ initialLeads }: { initialLeads: KanbanLead
 
     if (!currentStage || targetStage === currentStage) return
 
-    // Mise à jour optimiste
     setLeads((prev) =>
       prev.map((l) => l.id === activeId ? { ...l, stage: targetStage } : l)
     )
 
-    // Persistance
-    await supabase
-      .from('leads')
-      .update({ stage: targetStage })
-      .eq('id', activeId)
+    await supabase.from('leads').update({ stage: targetStage }).eq('id', activeId)
   }
 
   return (
